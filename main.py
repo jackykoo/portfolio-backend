@@ -3,14 +3,14 @@ import yfinance as yf
 
 if __name__ == '__main__':
     # define the ticker symbol
-    tickerSymbol = 'PLTR'
+    ticker_symbol = 'meta'
+    alibaba = '9988.HK'
 
     # get data on this ticker
-    tickerData = yf.Ticker(tickerSymbol)
+    stock = yf.Ticker(ticker_symbol)
 
     # get the historical prices for this ticker
-    tickerDf = tickerData.history(period='1d', start='2010-1-1', end='2020-1-25')
-
-    # see your data
-    print(tickerDf)
-
+    # tickerDf = stock.history(period='1d', start='2022-10-1', end='2022-10-11')
+    # print(tickerDf)
+    price = stock.info['regularMarketPrice']
+    print(price)
