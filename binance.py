@@ -67,33 +67,30 @@ def get_position_cost(records):
 
     pnl = 0
     for record in filled_records:
+
         if record['side'] == 'BUY':
             position_val += float(record['cummulativeQuoteQty'])
             qty += float(record['executedQty'])
-            cost_basis = position_val / qty
         elif record['side'] == 'SELL':
             # new_spent = old_spent - (sold * cost_basis)
             sold_qty = float(record['executedQty'])
 
             delta_pos_val = cost_basis * sold_qty
             position_val = position_val - delta_pos_val if position_val - delta_pos_val > 0 else 0
+
+            # minus sold, (if sold > qty, mean sold contain staking reward)
             qty = qty - sold_qty if qty - sold_qty > 0 else 0
 
             # P/L
             pnl += (float(record['price']) - cost_basis) * sold_qty
 
-            if qty:
-                cost_basis = position_val / qty
-            else:
-                cost_basis = 0
+        cost_basis = position_val / qty if qty else 0
 
     print("{} -> cost basis: {}, qty: {}, P/L: {}".format(trading_pair, cost_basis, qty, pnl))
 
 
 if __name__ == '__main__':
     client = Binance(API_KEY, API_SECRET_KEY)
-
-    # client = Binance(HWK_API_KEY, HWK_API_SECRET_KEY)
 
     # Testing
     trading_pair = 'ETHUSDT'
